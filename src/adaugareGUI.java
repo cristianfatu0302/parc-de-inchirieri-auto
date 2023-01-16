@@ -1,0 +1,230 @@
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class adaugareGUI extends JFrame {
+    private JTextField id;
+
+    private JTextField sex;
+    private JTextField judet;
+    private JTextField oras;
+    private JTextField nume;
+
+    private JTextField cnp;
+    private JTextField email;
+    private JTextField prenume;
+    private JTextField numar;
+    private JTextField permis;
+    private JButton adaugaClientButton;
+    private JPanel adaugareForm;
+    private JTextField dataEliberare;
+    private JButton BACKButton;
+    private JRadioButton mRadioButton;
+    private JRadioButton fRadioButton;
+    private JButton VEZICLIENTIButton;
+
+
+    public adaugareGUI() {
+        setTitle("Adaugare");
+        setContentPane(adaugareForm);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setMinimumSize(new Dimension(500, 650));
+        setVisible(true);
+
+        ButtonGroup bgroup1 = new ButtonGroup();
+        bgroup1.add(fRadioButton);
+        bgroup1.add(mRadioButton);
+
+        adaugaClientButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+
+                    Connection connection = conectare.conect();
+                    String query = "INSERT INTO Clienti ( Nume, Prenume, CategoriiPermis, NumarTelefon, Email, CNP, DataEliberarePermis, Oras, Judet, Sex)" +
+                            " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement statement = connection.prepareStatement(query);
+
+
+                    //int id = Integer.valueOf(adaugareGUI.this.id.getText());
+                    String nume1 = nume.getText();
+                    String prenume1 = prenume.getText();
+                    String catPermis = permis.getText();
+                    String numarTelefon = numar.getText();
+                    String email1 = email.getText();
+                    String cnp1 = cnp.getText();
+                    String data = dataEliberare.getText();
+                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date data1 = formatter.parse(data);
+                    java.sql.Date sqlData = new java.sql.Date(data1.getTime());
+                    String oras1 = oras.getText();
+                    String judet1 = judet.getText();
+                    String sex1 = " ";
+
+                    if (mRadioButton.isSelected()) {
+                        sex1 = "M";
+                    } else if (fRadioButton.isSelected()) {
+                        sex1 = "F";
+                    }
+
+
+                    //statement.setInt(1, id);
+                    statement.setString(1, nume1);
+                    statement.setString(2, prenume1);
+                    statement.setString(3, catPermis);
+                    statement.setString(4, numarTelefon);
+                    statement.setString(5, email1);
+                    statement.setString(6, cnp1);
+                    statement.setDate(7, sqlData);
+                    statement.setString(8, oras1);
+                    statement.setString(9, judet1);
+                    statement.setString(10, sex1);
+                    statement.execute();
+                    JOptionPane.showMessageDialog(adaugareGUI.super.rootPane, "Client Adaugat cu succes in baza de date", "Action successful", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                } catch (ParseException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+        BACKButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int rasp = JOptionPane.showConfirmDialog(adaugareGUI.super.rootPane, "Vrei sa te intorci la pagina de administrare?", "Action", JOptionPane.YES_NO_OPTION);
+
+                if (rasp == 0) {
+                    adminGUI admin = new adminGUI();
+                    dispose();
+                }
+
+            }
+        });
+        VEZICLIENTIButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clientiGUI clienti = new clientiGUI();
+                clienti.createTable();
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+
+        adaugareGUI demo = new adaugareGUI();
+    }
+
+    {
+// GUI initializer generated by IntelliJ IDEA GUI Designer
+// >>> IMPORTANT!! <<<
+// DO NOT EDIT OR ADD ANY CODE HERE!
+        $$$setupUI$$$();
+    }
+
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$() {
+        adaugareForm = new JPanel();
+        adaugareForm.setLayout(new GridLayoutManager(28, 11, new Insets(0, 0, 0, 0), -1, -1));
+        adaugareForm.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        judet = new JTextField();
+        adaugareForm.add(judet, new GridConstraints(20, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        oras = new JTextField();
+        adaugareForm.add(oras, new GridConstraints(18, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        nume = new JTextField();
+        adaugareForm.add(nume, new GridConstraints(4, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        dataEliberare = new JTextField();
+        adaugareForm.add(dataEliberare, new GridConstraints(16, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        cnp = new JTextField();
+        adaugareForm.add(cnp, new GridConstraints(14, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        email = new JTextField();
+        adaugareForm.add(email, new GridConstraints(12, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        prenume = new JTextField();
+        adaugareForm.add(prenume, new GridConstraints(6, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        numar = new JTextField();
+        adaugareForm.add(numar, new GridConstraints(10, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        permis = new JTextField();
+        adaugareForm.add(permis, new GridConstraints(8, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        final JLabel label1 = new JLabel();
+        label1.setText("Nume");
+        adaugareForm.add(label1, new GridConstraints(3, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("Prenume");
+        adaugareForm.add(label2, new GridConstraints(5, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label3 = new JLabel();
+        label3.setText("CategoriiPermis");
+        adaugareForm.add(label3, new GridConstraints(7, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label4 = new JLabel();
+        label4.setText("Numar Telefon");
+        adaugareForm.add(label4, new GridConstraints(9, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        label5.setText("Email");
+        adaugareForm.add(label5, new GridConstraints(11, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label6 = new JLabel();
+        label6.setText("CNP");
+        adaugareForm.add(label6, new GridConstraints(13, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label7 = new JLabel();
+        label7.setText("Data Eliberare Permis");
+        adaugareForm.add(label7, new GridConstraints(15, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label8 = new JLabel();
+        label8.setText("Oras");
+        adaugareForm.add(label8, new GridConstraints(17, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label9 = new JLabel();
+        label9.setText("Judet");
+        adaugareForm.add(label9, new GridConstraints(19, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label10 = new JLabel();
+        label10.setText("Sex");
+        adaugareForm.add(label10, new GridConstraints(21, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        adaugaClientButton = new JButton();
+        adaugaClientButton.setText("Adauga Client ");
+        adaugareForm.add(adaugaClientButton, new GridConstraints(24, 0, 1, 11, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        BACKButton = new JButton();
+        BACKButton.setText("BACK");
+        adaugareForm.add(BACKButton, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        adaugareForm.add(spacer1, new GridConstraints(1, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        adaugareForm.add(spacer2, new GridConstraints(2, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        mRadioButton = new JRadioButton();
+        mRadioButton.setText("M");
+        adaugareForm.add(mRadioButton, new GridConstraints(22, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        fRadioButton = new JRadioButton();
+        fRadioButton.setText("F");
+        adaugareForm.add(fRadioButton, new GridConstraints(23, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        VEZICLIENTIButton = new JButton();
+        VEZICLIENTIButton.setText("VEZI CLIENTI");
+        adaugareForm.add(VEZICLIENTIButton, new GridConstraints(26, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        adaugareForm.add(panel1, new GridConstraints(27, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        adaugareForm.add(panel2, new GridConstraints(25, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        label7.setLabelFor(dataEliberare);
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return adaugareForm;
+    }
+
+}
